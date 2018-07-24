@@ -8,6 +8,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const grpc = require('grpc')
 const path = require('path');
+const cors = require('cors')
+const crypto = require('crypto');
 
 const argv = yargs.usage('Usage: $0 [options]')
   .help('?')
@@ -32,6 +34,9 @@ const argv = yargs.usage('Usage: $0 [options]')
   .boolean('quiet')
   .describe('quiet', 'Suppress logs')
   .alias('quiet', 'q')
+
+  .boolean('cors')
+  .describe('cors', 'Allow CORS')
   .argv
 
 let credentials
@@ -78,21 +83,27 @@ if (argv.include !== undefined) {
 let router = grpcGateway(readFolder(protofilesPath), argv.grpc, credentials, !argv.quiet, includePath)
 
 const app = express()
+if(argv.cors){
+  console.log(`Enabling CORS`)
+  app.use(cors())
+}
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/api', router)
 app.post('/new', (req, res) => { // API point to add a new proto file.
-    if(!req.hasOwnProperty('protoName') || !req.hasOwnProperty('proto')) {
+    if(req.body === undefined || !req.body.protoName || !req.body.proto) {
       res.status(400)
       res.json({error: 'Some properties are missing'});
       return; 
     }
-    fs.writeFile(+req.body.protoName, req.body.proto, function(err) {
+    const filename = crypto.createHash('md5').update(req.body.proto+(new Date().toISOString())).digest("hex")+'.proto';
+
+    fs.writeFile(protofilesPath+filename, req.body.proto, function(err) {
     if(err) {
       console.log(err);
       res.send('error')
     }
-    console.log("The file "+path.dirname(__filename)+"/protofiles/"+req.body.protoName+" was saved!");
+    console.log("The file "+path.dirname(__filename)+"/protofiles/"+filename+" was saved!");
     // drop routes, and reload them. yeah!
     app._router.stack = [];
     app.use(grpcGateway(readFolder(protofilesPath), argv.grpc, credentials, !argv.quiet))

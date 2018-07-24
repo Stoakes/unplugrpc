@@ -115,8 +115,24 @@ const convertBody = (value, bodyMap) => {
   }
 }
 
+/**
+ * Get a list of params from a gRPC URL
+ * @param  {string} url gRPC URL
+ * @return {string[]}   Array of params
+ */
+const getParamsList = (url) => {
+  const out = []
+  let m
+  while ((m = paramRegex.exec(url)) !== null) {
+    if (m.index === paramRegex.lastIndex) {
+      paramRegex.lastIndex++
+    }
+    out.push(m[1])
+  }
+  return out
+}
+
 // interface
 module.exports = middleware
 module.exports.convertParams = convertParams
 module.exports.convertBody = convertBody
-module.exports.getParamsList = getParamsList
