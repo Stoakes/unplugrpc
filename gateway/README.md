@@ -6,6 +6,7 @@ Expose your gRPC endpoints through a HTTP API.
 
 ```bash
 npm install
+npm run build
 npm start
 ```
 
@@ -15,20 +16,34 @@ npm start
  2. Launch it
  3. Go to [http://localhost:8000](http://localhost:8000)
 
-# cli
+
+**CLI**
 
 ```
-Usage: grpc-dynamic-gateway [options] DEFINITION.proto [DEFINITION2.proto...]
+Usage: gateway [options]
 
 Options:
   -?, --help, -h    Show help                                          [boolean]
   --port, -p        The port to serve your JSON proxy on         [default: 8080]
-  --grpc, -g        The host & port to connect to, where your gprc-server is
-                    running                         [default: "localhost:50051"]
   -I, --include     Path to resolve imports from
-  --ca              SSL CA cert for gRPC
-  --key             SSL client key for gRPC
-  --cert            SSL client certificate for gRPC
-  --mountpoint, -m  URL to mount server on                        [default: "/"]
   --quiet, -q       Suppress logs                                      [boolean]
+```
+
+## Development
+
+Here is a list of helpers during the development:
+
+ 1. `npm run test` Launch jest tests
+ 2. `npm run lint` Launch linter
+ 3. `npm run lint-fix` Fix linter errors (when possible)
+ 4. `npm run watch` Launch watcher which will compile files to `dist` folder when a file is changed.
+ 5. `npm run dev` Launch the server with CORS accepted, useful on development when using the UI on another port.
+
+To develop on the gateway:
+```bash
+# Compile the UI once
+npm run build:ui
+npm run watch
+# Do your things, when ready, in another terminal:
+npm run dev
 ```
