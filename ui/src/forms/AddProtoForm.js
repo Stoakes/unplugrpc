@@ -8,7 +8,7 @@ import Button from "components/CustomButton/CustomButton.js";
 let AddProto = props => {
   return (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
-      <Field name="protoName" id="protoName" 
+      <Field name="name" id="name" 
             component={FormInput} type="text" label="Protofile name" 
             placeholder= "A nice name for your protofile" />
       <Field name="proto" id="proto" 

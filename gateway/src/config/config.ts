@@ -1,4 +1,4 @@
 const path = require("path");
 
-export const DB_PATH = path.dirname(__filename) + "/../data/db.json";
-export const PROTO_FOLDER = path.dirname(__filename) + "/../data/protoFolder";
+export const DB_PATH = path.join(__filename, "/../../../data/db.json");
+export const PROTO_FOLDER = path.join(__filename, "/../../../data/protoFolder");

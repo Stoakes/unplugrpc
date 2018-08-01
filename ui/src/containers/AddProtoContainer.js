@@ -19,7 +19,7 @@ function mapDispatchToProps(dispatch, ownProps) {
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: [encodeURIComponent('protoName')+'='+encodeURIComponent(formValues.protoName),
+                body: [encodeURIComponent('name')+'='+encodeURIComponent(formValues.name),
                 encodeURIComponent('proto')+'='+encodeURIComponent(formValues.proto)]
                 .join('&'),
             })

@@ -18,29 +18,43 @@ import * as fileService from "../services/fileService";
  */
 export const add = (req: Request, res: Response) => { // API point to add a new proto file.
     req.assert("name", "Name of the protofile cannot be blank").notEmpty();
+    req.assert("name", "Name of the protofile should be between 1 and 40 characters long").isLength({ min: 1, max: 40 });
+    req.assert("name", "Name of the proto should only contains alphanumeric characters").matches(/^[0-9a-zA-Z]{1,40}$/, "i");
     req.assert("proto", "Content of the protofile should be at least 20 characters long").isLength({ min: 20 });
 
-    const filename = crypto.createHash("md5").update(req.body.proto +
-      (new Date().toISOString())).digest("hex") + ".proto";
+    const filePath = PROTO_FOLDER + "/" + crypto.createHash("md5").update(req.body.name).digest("hex") + ".proto";
 
-    fs.writeFile(PROTO_FOLDER + filename, req.body.proto, function(err) {
+    // If file already exists and no force flag, return an error
+    if (fs.existsSync(filePath) && req.query.force === undefined) {
+      res.status(400);
+      res.json({message: `File ${req.body.name} already exists. Add flag force to your query to overwrite it.`});
+      return;
+    }
+
+    fs.writeFile(filePath, req.body.proto, function(err) {
       if (err) {
-        console.log(err);
-        res.send("error");
+        res.status(400);
+        res.json({message: `Can't write file on server. Check write permissions.`});
+        return;
       }
-    console.log("The file " + path.dirname(__filename) + "/protofiles/" + filename + " was saved!");
+    console.log("The file " + filePath + " was saved.");
     // check file can be loaded, erase it otherwise
+    let schema = {};
     try {
-      grpcService.load(filename);
+      grpcService.load(filePath);
+      schema = grpcService.schemaParse(filePath);
     } catch (error) {
-      console.log(`Error while loading ${req.body.protoName}.`);
-      fs.unlink(filename, function(err) {
+      fs.unlink(filePath, function(err) {
         if (err) {
           console.log(err);
-          res.send("error");
         }
       });
+      res.status(400);
+      res.json({message: `Error while loading file: ${error}`});
+      return;
     }
+    res.status(200);
+    res.json({message: `File loaded`, schema: schema});
   });
 };
 

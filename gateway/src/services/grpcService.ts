@@ -1,3 +1,5 @@
+import { PROTO_FOLDER } from "../config/config";
+
 /**
  * Functions for every grpc related interactions
  */
@@ -23,7 +25,21 @@ export const protofileToSchema = (protofilePath: string, includePath: string = u
  * @param path
  */
 export const load = (path: string): any => {
+  if (!path.startsWith(PROTO_FOLDER)) {
+    path = PROTO_FOLDER + "/" + path;
+  }
   return grpc.load(path);
+};
+
+/**
+ * Return the representation of a
+ * @param path
+ */
+export const schemaParse = (path: string) => {
+  if (!path.startsWith(PROTO_FOLDER)) {
+    path = PROTO_FOLDER + "/" + path;
+  }
+  return schema.parse(fs.readFileSync(path));
 };
 /**
  * generate middleware to proxy to gRPC defined by proto files
