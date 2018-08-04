@@ -22,12 +22,12 @@ export const getProtoFromFolder = (path: string): string[] => {
 /**
  * Create the tree of fodler for a path.
  * Example: createFolderTree('/tmp/hello/hello.proto) will create /tmp/hello if possible
- * @param path 
+ * @param path
  */
 export const createFolderTree = (path: string): string => {
-  if(path.endsWith('.proto')) {
-    const splitted = path.split('/')
-    path = splitted.slice(0,splitted.length-1).join('/');
+  if (path.endsWith(".proto")) {
+    const splitted = path.split("/");
+    path = splitted.slice(0, splitted.length - 1).join("/");
   }
   try {
     mkdirp.sync(path);
@@ -35,4 +35,4 @@ export const createFolderTree = (path: string): string => {
   } catch (error) {
     return error.message;
   }
-}
+};

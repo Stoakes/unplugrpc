@@ -26,9 +26,9 @@ const argv = yargs.usage("Usage: $0 [options]")
   .describe("cors", "Allow CORS")
   .argv;
 
-if(argv.cors){
-    console.log(`Enabling CORS`)
-    app.use(cors())
+if (argv.cors) {
+    console.log(`Enabling CORS`);
+    app.use(cors());
 }
 
 const server = app.listen(argv.port, () => {

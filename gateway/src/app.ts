@@ -16,6 +16,8 @@ app.use(expressValidator());
 // Routes
 app.get("/dashboard", dashboardController.index);
 app.post("/new", protoController.add);
+app.post("/api/:package.:service/:method/", protoController.api);
+app.get("/api/:package.:service/:method/", protoController.describe);
 app.use("/", express.static(path.join(__dirname, "/../build-ui")));
 
 export default app;
