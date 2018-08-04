@@ -1,16 +1,14 @@
-import React, { Component } from "react";
-import { Nav } from "react-bootstrap";
+import React, { Component } from 'react';
+import { Nav } from 'react-bootstrap';
 
 class HeaderLinks extends Component {
-  render() {
-    return (
-      <div>
-        <Nav>
-          
-        </Nav>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <Nav />
+            </div>
+        );
+    }
 }
 
 export default HeaderLinks;
