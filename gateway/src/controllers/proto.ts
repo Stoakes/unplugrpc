@@ -3,8 +3,6 @@
  */
 import { Request, Response } from "express";
 import * as fs from "fs";
-import * as path from "path";
-import * as crypto from "crypto";
 
 import { PROTO_FOLDER } from "../config/config";
 import * as dbService from "../services/dbService";
@@ -20,15 +18,30 @@ export const add = (req: Request, res: Response) => { // API point to add a new 
     req.assert("name", "Name of the protofile cannot be blank").notEmpty();
     req.assert("name", "Name of the protofile should be between 1 and 40 characters long").isLength({ min: 1, max: 40 });
     req.assert("name", "Name of the proto should only contains alphanumeric characters").matches(/^[0-9a-zA-Z]{1,40}$/, "i");
+    req.assert("path", "Path should not be empty").notEmpty();
+    req.assert("path", "Path should be between 7 and 40 characters long").isLength({ min: 7, max: 40 });
+    req.assert("path", "Path can not contains ..${[()]}\| characters").customSanitizer(
+      value => !new RegExp('\{|\[|\(|\.\.|\]|\)|\}|\$|\\').test(value));
+    req.assert("path", "Path should end with .proto").customSanitizer(value => value.endsWith(".proto"));
     req.assert("proto", "Content of the protofile should be at least 20 characters long").isLength({ min: 20 });
 
-    const filePath = PROTO_FOLDER + "/" + crypto.createHash("md5").update(req.body.name).digest("hex") + ".proto";
+    const filePath = PROTO_FOLDER + "/" + req.body.path;
 
     // If file already exists and no force flag, return an error
     if (fs.existsSync(filePath) && req.query.force === undefined) {
       res.status(400);
       res.json({message: `File ${req.body.name} already exists. Add flag force to your query to overwrite it.`});
       return;
+    }
+
+    if(req.body.path.includes("/")){
+      let err = fileService.createFolderTree(filePath);
+      if (err) {
+        console.log(err)
+        res.status(400);
+        res.json({message: `Can't create folder tree on server. Check write permissions.`});
+        return;
+      }
     }
 
     fs.writeFile(filePath, req.body.proto, function(err) {
