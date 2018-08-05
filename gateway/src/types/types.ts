@@ -57,3 +57,12 @@
     filePath: string,
     schema: Schema
  };
+
+ /**
+  * A host is a server exposing a grpc interface
+  */
+ export type Host = {
+    name: string,
+    host: string,
+    port: number
+ };
