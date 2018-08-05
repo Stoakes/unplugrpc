@@ -4,7 +4,7 @@ import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
 export class FormInput extends Component {
     render() {
-        const { placeholder, type, input, label } = this.props;
+        const { placeholder, type, input, label, meta } = this.props;
 
         return (
             <FormGroup controlId={input.name}>
@@ -15,6 +15,7 @@ export class FormInput extends Component {
                     value={input.value}
                     onChange={input.onChange}
                 />
+                {meta.touched && (meta.error && <span>{meta.error}</span>)}
             </FormGroup>
         );
     }
@@ -25,10 +26,12 @@ FormInput.propTypes = {
     type: PropTypes.string,
     input: PropTypes.object,
     label: PropTypes.string,
+    meta: PropTypes.object,
 };
 
 FormInput.defaultProps = {
     placeholder: '',
+    meta: {},
 };
 
 export default FormInput;
