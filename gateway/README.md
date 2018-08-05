@@ -6,6 +6,7 @@ Expose your gRPC endpoints through a HTTP API.
 
 ```bash
 npm install
+cp data/db.json.dist data/db.json
 npm run build
 npm start
 ```
