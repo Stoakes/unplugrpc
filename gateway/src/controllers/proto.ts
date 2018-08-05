@@ -13,20 +13,22 @@ import { Schema } from "../types/types";
 const grpc = require("grpc");
 
 /**
- * Add a new protofile to the index of tracked files.
+ * Add a new protofile to the protofile folder which can then be loaded on request
+ * Schema of the file will be stored in DB
+ *
  * @param req HTTP request
  * @param res HTTP response
  */
-export const add = (req: Request, res: Response) => { // API point to add a new proto file.
-    req.assert("name", "Name of the protofile cannot be blank").notEmpty();
-    req.assert("name", "Name of the protofile should be between 1 and 40 characters long").isLength({ min: 1, max: 40 });
-    req.assert("name", "Name of the proto should only contains alphanumeric characters").matches(/^[0-9a-zA-Z]{1,40}$/, "i");
-    req.assert("path", "Path should not be empty").notEmpty();
-    req.assert("path", "Path should be between 7 and 40 characters long").isLength({ min: 7, max: 40 });
-    req.assert("path", "Path can not contains ..${[()]}\| characters").customSanitizer(
-      value => !new RegExp("\{|\[|\(|\.\.|\]|\)|\}|\$|\\").test(value));
-    req.assert("path", "Path should end with .proto").customSanitizer(value => value.endsWith(".proto"));
-    req.assert("proto", "Content of the protofile should be at least 20 characters long").isLength({ min: 20 });
+export const add = (req: Request, res: Response) => {
+    req.checkBody("name", "Name of the protofile cannot be blank").notEmpty();
+    req.checkBody("name", "Name of the protofile should be between 1 and 40 characters long").isLength({ min: 1, max: 40 });
+    req.checkBody("name", "Name of the proto should only contains alphanumeric characters").matches(/^[0-9a-zA-Z]{1,40}$/, "i");
+    req.checkBody("path", "Path should not be empty").notEmpty();
+    req.checkBody("path", "Path should be between 7 and 40 characters long").isLength({ min: 7, max: 40 });
+    req.checkBody("path", "Path can not contains ..${[()]}\| characters").customSanitizer(
+      (value: string) => !new RegExp("\{|\[|\(|\.\.|\]|\)|\}|\$|\\").test(value));
+    req.checkBody("path", "Path should end with .proto").customSanitizer((value: any) => value.endsWith(".proto"));
+    req.checkBody("proto", "Content of the protofile should be at least 20 characters long").isLength({ min: 20 });
 
     const filePath = PROTO_FOLDER + "/" + req.body.path;
 
