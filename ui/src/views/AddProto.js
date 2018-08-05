@@ -12,18 +12,15 @@ class View extends Component {
                 <Grid fluid>
                     <Row>
                         <Col md={12}>
-                            <Card
-                                title="Add a Protofile"
-                                content={
-                                    <div>
-                                        <AddProtoForm
-                                            onSubmit={values => {
-                                                this.props.addProto(values);
-                                            }}
-                                        />
-                                    </div>
-                                }
-                            />
+                            <Card title="Add a Protofile">
+                                <div>
+                                    <AddProtoForm
+                                        onSubmit={values => {
+                                            this.props.addProto(values);
+                                        }}
+                                    />
+                                </div>
+                            </Card>
                         </Col>
                     </Row>
                 </Grid>

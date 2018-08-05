@@ -26,7 +26,7 @@ export class Card extends Component {
                         (this.props.ctTableUpgrade ? ' table-upgrade' : '')
                     }
                 >
-                    {this.props.content}
+                    {this.props.children}
 
                     <div className="footer">
                         {this.props.legend}
@@ -51,7 +51,6 @@ Card.propTypes = {
     ctTableFullWidth: PropTypes.string,
     ctTableResponsive: PropTypes.string,
     ctTableUpgrade: PropTypes.string,
-    content: PropTypes.object,
     legend: PropTypes.string,
     stats: PropTypes.string,
     statsIcon: PropTypes.string,
