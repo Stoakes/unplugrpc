@@ -1,5 +1,6 @@
 import Homepage from '../views/Homepage';
 import AddProto from '../containers/AddProtoContainer';
+import Hosts from '../containers/HostsContainer';
 import UseProto from '../views/UseProto';
 
 const dashboardRoutes = [
@@ -20,6 +21,12 @@ const dashboardRoutes = [
         name: 'Use',
         icon: 'pe-7s-news-paper',
         component: UseProto,
+    },
+    {
+        path: '/hosts',
+        name: 'Hosts',
+        icon: 'pe-7s-news-paper',
+        component: Hosts,
     },
     { redirect: true, path: '/', to: '/home', name: 'Home' },
 ];
