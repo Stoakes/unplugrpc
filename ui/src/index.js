@@ -7,6 +7,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import indexRoutes from './routes';
 import appReducer from './reducers/index';
+import notificationsReducer from './reducers/notifications';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/animate.min.css';
@@ -15,6 +16,7 @@ import './assets/css/light-bootstrap-dashboard.css';
 const reducer = combineReducers({
     app: appReducer,
     form: formReducer,
+    notifications: notificationsReducer,
 });
 
 const store = (window.devToolsExtension

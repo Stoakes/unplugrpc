@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import NotificationSystem from '../containers/NotificationSystemContainer';
 
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
@@ -24,6 +25,11 @@ class Dashboard extends Component {
     render() {
         return (
             <div className="wrapper">
+                <NotificationSystem
+                    ref={c => {
+                        this.notificationSystem = c;
+                    }}
+                />
                 <Sidebar {...this.props} />
                 <div id="main-panel" className="main-panel">
                     <Header {...this.props} />

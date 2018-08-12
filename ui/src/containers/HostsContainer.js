@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
-import View from '../views/Hosts';
 
+import View from '../views/Hosts';
 import { addHosts } from '../actions/hosts';
+import { addNotification } from '../actions/notifications';
 
 function mapStateToProps(state, ownProps) {
     return {
@@ -22,12 +23,15 @@ function mapDispatchToProps(dispatch) {
                 body: JSON.stringify(formValues),
             })
                 .then(response => response.json())
-                .then(responseJson => {
-                    console.log('response', responseJson);
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+                .then(responseJson => dispatch(addNotification(responseJson)))
+                .catch(error =>
+                    dispatch(
+                        addNotification({
+                            message: error.message,
+                            level: 'error',
+                        })
+                    )
+                );
         },
         fetchHosts: () => {
             fetch(process.env.REACT_APP_API_URL + '/hosts').then(response => {
@@ -35,6 +39,13 @@ function mapDispatchToProps(dispatch) {
                     dispatch(addHosts(response));
                 }
             });
+        },
+        deleteHost: id => {
+            fetch(process.env.REACT_APP_API_URL + '/hosts/' + id, {
+                method: 'delete',
+            })
+                .then(response => response.json())
+                .then(responseJson => addNotification(responseJson));
         },
     };
 }
