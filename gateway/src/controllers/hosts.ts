@@ -9,8 +9,8 @@ import * as dbService from "../services/dbService";
 
 /**
  * Add an host to the database
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const add = (req: Request, res: Response) => {
     body("port").toInt();
@@ -29,24 +29,24 @@ export const add = (req: Request, res: Response) => {
             dbService.get("hosts")
             .push({name: req.body.name, host: req.body.host, port: req.body.port})
             .write();
-            res.json({message: `Host added to the list`});
+            res.json({level: `success`, message: `Host added to the list`});
         } else {
             res.status(400);
-            res.json({message: `An host with similar host and port already exists`})
+            res.json({level: `error`, message: `An host with similar host and port already exists`});
         }
 
     } catch (error) {
         console.log(error);
         res.status(400);
-        res.json({message: `An error occured. ${error.message}`});
+        res.json({level: `error`, message: `An error occured. ${error.message}`});
     }
 };
 
 /**
  * Update an existing host
  * Note: an host is not described by an id, but by the couple host, port.
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const update = (req: Request, res: Response) => {
     body("port").toInt();
@@ -62,27 +62,27 @@ export const update = (req: Request, res: Response) => {
         .value();
 
         if (host === undefined) {
-            res.status(404)
-            res.json({message: `Host does not exist`});
+            res.status(404);
+            res.json({level: `error`, message: `Host does not exist`});
         } else {
             dbService.get("hosts")
             .find({host: req.params.host, port: req.params.port})
             .assign({name: req.body.name, host: req.body.host, port: req.body.port})
             .write();
-            res.json({message: `Host updated`});
+            res.json({level: `success`, message: `Host updated`});
         }
     } catch (error) {
         console.log(error);
         res.status(400);
-        res.json({message: `An error occured. ${error.message}`});
+        res.json({level: `error`, message: `An error occured. ${error.message}`});
     }
-}
+};
 
 /**
  * Delete an existing host
  * Note: an host is not described by an id, but by the couple host, port.
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const remove = (req: Request, res: Response) => {
     try {
@@ -91,25 +91,25 @@ export const remove = (req: Request, res: Response) => {
         .value();
 
         if (host === undefined) {
-            res.status(404)
-            res.json({message: `Host does not exist`});
+            res.status(404);
+            res.json({level: `error`, message: `Host does not exist`});
         } else {
             dbService.get("hosts")
             .remove({host: req.params.host, port: req.params.port})
             .write();
-            res.json({message: `Host deleted`});
+            res.json({level: `success`, message: `Host deleted`});
         }
     } catch (error) {
         console.log(error);
         res.status(400);
-        res.json({message: `An error occured. ${error.message}`});
+        res.json({level: `error`, message: `An error occured. ${error.message}`});
     }
-}
+};
 
 /**
  * Return the list of all host stored in the database.
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const list = (req: Request, res: Response) => {
 

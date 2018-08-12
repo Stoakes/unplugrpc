@@ -35,7 +35,7 @@ export const add = (req: Request, res: Response) => {
     // If file already exists and no force flag, return an error
     if (fs.existsSync(filePath) && req.query.force === undefined) {
       res.status(400);
-      res.json({message: `File ${req.body.name} already exists. Add flag force to your query to overwrite it.`});
+      res.json({level: `error`, message: `File ${req.body.name} already exists. Add flag force to your query to overwrite it.`});
       return;
     }
 
@@ -44,7 +44,7 @@ export const add = (req: Request, res: Response) => {
       if (err) {
         console.log(err);
         res.status(400);
-        res.json({message: `Can't create folder tree on server. Check write permissions.`});
+        res.json({level: `error`, message: `Can't create folder tree on server. Check write permissions.`});
         return;
       }
     }
@@ -52,7 +52,7 @@ export const add = (req: Request, res: Response) => {
     fs.writeFile(filePath, req.body.proto, function(err) {
       if (err) {
         res.status(400);
-        res.json({message: `Can't write file on server. Check write permissions.`});
+        res.json({level: `error`, message: `Can't write file on server. Check write permissions.`});
         return;
       }
     console.log("The file " + filePath + " was saved.");
@@ -69,11 +69,11 @@ export const add = (req: Request, res: Response) => {
         }
       });
       res.status(400);
-      res.json({message: `Error while loading file: ${error}`});
+      res.json({level: `error`, message: `Error while loading file: ${error}`});
       return;
     }
     res.status(200);
-    res.json({message: `File loaded`, schema: schema});
+    res.json({level: `success`, message: `File loaded`, schema: schema});
   });
 };
 
@@ -130,7 +130,7 @@ export const api = (req: Request, res: Response) => {
     console.error(red(`${triplet.service.name}.${triplet.method.name}`, error.message));
     console.trace();
     res.status(500);
-    res.json({message: `An error occured. ${error.message}`});
+    res.json({level: `error`, message: `An error occured. ${error.message}`});
     return;
   }
 };
@@ -164,19 +164,19 @@ const checkProtoMethod = (req: Request, res: Response) => {
   const pack = dbService.getSchema(req.params.package);
   if ( pack === undefined) {
     res.status(404);
-    res.json({message: `Package not found. This method is case sensitive.`});
+    res.json({level: `error`, message: `Package not found. This method is case sensitive.`});
     return undefined;
   }
   const service = dbService.getService(pack.schema, req.params.service);
   if ( service === undefined) {
     res.status(404);
-    res.json({message: `Service not found. This method is case sensitive.`});
+    res.json({level: `error`, message: `Service not found. This method is case sensitive.`});
     return undefined;
   }
   const method = dbService.getMethod(pack.schema, service, req.params.method);
   if ( method === undefined) {
     res.status(404);
-    res.json({message: `Method not found. This method is case sensitive.`});
+    res.json({level: `error`, message: `Method not found. This method is case sensitive.`});
     return undefined;
   }
   return {package: pack, service: service, method: method};
