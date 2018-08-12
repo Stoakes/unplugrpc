@@ -17,6 +17,13 @@ export const add = (req: Request, res: Response) => {
     body("port").isPort();
     req.checkBody("host", "Host can not be empty").notEmpty();
 
+    const errors = req.validationErrors() as any[];
+    if (errors) {
+      res.status(400);
+      res.json({level: `error`, message: errors[0].msg});
+      return;
+    }
+
     if (req.body.name === undefined || req.body.name === "") {
         req.body.name =  `${req.body.host}:${req.body.port}`;
     }

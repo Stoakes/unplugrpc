@@ -26,9 +26,17 @@ export const add = (req: Request, res: Response) => {
     req.checkBody("path", "Path should not be empty").notEmpty();
     req.checkBody("path", "Path should be between 7 and 40 characters long").isLength({ min: 7, max: 40 });
     req.checkBody("path", "Path can not contains ..${[()]}\| characters").customSanitizer(
-      (value: string) => !new RegExp("\{|\[|\(|\.\.|\]|\)|\}|\$|\\").test(value));
-    req.checkBody("path", "Path should end with .proto").customSanitizer((value: any) => value.endsWith(".proto"));
+      (value: string) => !new RegExp("/\\{|\\[|\\(|\\.\\.|\\]|\\)|\\}|\\$|\\/").test(value));
+    req.checkBody("path", "Path should end with .proto").customSanitizer((value: string) => value.endsWith(".proto"));
+    req.checkBody("proto", "Content of the protofile not be blank").notEmpty();
     req.checkBody("proto", "Content of the protofile should be at least 20 characters long").isLength({ min: 20 });
+
+    const errors = req.validationErrors() as any[];
+    if (errors) {
+      res.status(400);
+      res.json({level: `error`, message: errors[0].msg});
+      return;
+    }
 
     const filePath = PROTO_FOLDER + "/" + req.body.path;
 
