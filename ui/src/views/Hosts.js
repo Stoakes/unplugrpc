@@ -59,6 +59,12 @@ class View extends Component {
                                                             <Button
                                                                 bsStyle="danger"
                                                                 bsSize="small"
+                                                                onClick={() =>
+                                                                    this.props.deleteHost(
+                                                                        host.host,
+                                                                        host.port
+                                                                    )
+                                                                }
                                                             >
                                                                 Remove
                                                             </Button>
@@ -80,6 +86,7 @@ class View extends Component {
 View.propTypes = {
     addHost: PropTypes.func,
     fetchHosts: PropTypes.func,
+    deleteHost: PropTypes.func,
     hosts: PropTypes.array,
 };
 
