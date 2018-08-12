@@ -1,6 +1,5 @@
-import app from "./app";
+import newApp from "./app";
 import yargs from "yargs";
-import cors from "cors";
 
 const argv = yargs.usage("Usage: $0 [options]")
   .help("?")
@@ -26,10 +25,8 @@ const argv = yargs.usage("Usage: $0 [options]")
   .describe("cors", "Allow CORS")
   .argv;
 
-if (argv.cors) {
-    console.log(`Enabling CORS`);
-    app.use(cors());
-}
+
+const app = newApp(argv.cors);
 
 const server = app.listen(argv.port, () => {
   if (!argv.quiet) {
