@@ -2,6 +2,7 @@ export const HostsMessage = {
     ADD_HOSTS: 'ADD_HOSTS',
     ADD_HOST: 'ADD_HOST',
     REMOVE_HOST: 'REMOVE_HOST',
+    SELECT_HOST: 'SELECT_HOST',
 };
 
 /**
@@ -37,6 +38,18 @@ export function addHost(host) {
 export function removeHost(host, port) {
     return {
         type: HostsMessage.REMOVE_HOST,
+        payload: { host: host, port: port },
+    };
+}
+
+/**
+ * Choose host to be contacted
+ * @param string host a host is described by the couple (host, port)
+ * @param string port
+ */
+export function selectHost(host, port) {
+    return {
+        type: HostsMessage.SELECT_HOST,
         payload: { host: host, port: port },
     };
 }
