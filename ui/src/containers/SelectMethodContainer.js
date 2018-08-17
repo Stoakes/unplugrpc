@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import View from '../components/SelectMethod';
+import View from '../components/apps/SelectMethod';
 import { addNotification } from '../actions/notifications';
 import { setPackages, setSelectedPackage } from '../actions/packages';
 import { selectMethod, selectPackage } from '../actions/proto';

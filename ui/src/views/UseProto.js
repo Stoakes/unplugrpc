@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Row, Col } from 'react-bootstrap';
 
-import { Card } from '../components/Card/Card.js';
+import { Card } from '../components/themes/Card.js';
 import SelectMethod from '../containers/SelectMethodContainer';
 import UseProtoForm from '../forms/UseProtoForm';
 

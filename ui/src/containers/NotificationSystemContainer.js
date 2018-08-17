@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import NotificationSystem from '../components/NotificationSystem';
+import NotificationSystem from '../components/apps/NotificationSystem';
 
 class NotificationSystemContainer extends React.Component {
     render() {

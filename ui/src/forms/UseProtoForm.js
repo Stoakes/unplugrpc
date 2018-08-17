@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 
-import { TextareaInput } from '../components/FormInput/TextareaInput.js';
-import Button from '../components/CustomButton/CustomButton.js';
+import { TextareaInput } from '../components/inputs/TextareaInput.js';
+import Button from '../components/themes/CustomButton.js';
 
 let UseProto = props => {
     return (
