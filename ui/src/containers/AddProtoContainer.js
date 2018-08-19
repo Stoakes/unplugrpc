@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import View from '../views/AddProto';
-// import {addProto} from "../actions/proto";
+import { addNotification } from '../actions/notifications';
 
 function mapStateToProps(state, ownProps) {
     return {
@@ -32,10 +32,10 @@ function mapDispatchToProps(dispatch) {
             })
                 .then(response => response.json())
                 .then(responseJson => {
-                    console.log('response', responseJson);
+                    dispatch(addNotification(responseJson));
                 })
                 .catch(error => {
-                    console.error(error);
+                    dispatch(addNotification(error));
                 });
         },
     };
