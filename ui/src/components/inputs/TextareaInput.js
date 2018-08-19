@@ -4,7 +4,7 @@ import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
 export class TextareaInput extends Component {
     render() {
-        const { placeholder, rows, input, label } = this.props;
+        const { disabled, input, label, placeholder, rows } = this.props;
 
         return (
             <FormGroup controlId={input.name}>
@@ -15,6 +15,7 @@ export class TextareaInput extends Component {
                     placeholder={placeholder}
                     value={input.value}
                     onChange={input.onChange}
+                    disabled={disabled}
                 />
             </FormGroup>
         );
@@ -22,13 +23,15 @@ export class TextareaInput extends Component {
 }
 
 TextareaInput.propTypes = {
-    placeholder: PropTypes.string,
-    rows: PropTypes.number,
+    disabled: PropTypes.bool,
     input: PropTypes.object,
     label: PropTypes.string,
+    placeholder: PropTypes.string,
+    rows: PropTypes.number,
 };
 
 TextareaInput.defaultProps = {
+    disabled: false,
     placeholder: '',
     rows: 10,
 };

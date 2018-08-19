@@ -4,8 +4,7 @@ import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
 export class SelectInput extends Component {
     render() {
-        const { placeholder, input, label, meta } = this.props;
-
+        const { disabled, input, label, meta, placeholder } = this.props;
         return (
             <FormGroup controlId={input.name}>
                 <ControlLabel>{label}</ControlLabel>
@@ -14,6 +13,7 @@ export class SelectInput extends Component {
                     placeholder={placeholder}
                     value={input.value}
                     onChange={input.onChange}
+                    disabled={disabled}
                 >
                     {this.props.children}
                 </FormControl>
@@ -25,6 +25,7 @@ export class SelectInput extends Component {
 
 SelectInput.propTypes = {
     children: PropTypes.any,
+    disabled: PropTypes.bool,
     input: PropTypes.object,
     label: PropTypes.string,
     meta: PropTypes.object,
@@ -33,6 +34,7 @@ SelectInput.propTypes = {
 
 SelectInput.defaultProps = {
     children: '',
+    disabled: false,
     meta: {},
     placeholder: '',
 };
