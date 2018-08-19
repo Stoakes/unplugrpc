@@ -56,6 +56,7 @@ Card.propTypes = {
     hCenter: PropTypes.string,
     title: PropTypes.string,
     category: PropTypes.string,
+    children: PropTypes.any,
     ctAllIcons: PropTypes.string,
     ctTableFullWidth: PropTypes.string,
     ctTableResponsive: PropTypes.string,
