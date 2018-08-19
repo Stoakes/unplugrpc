@@ -46,6 +46,18 @@ export default function(state = DEFAULT_STATE, action) {
                 },
             },
         };
+    } else if (action.type === ProtoMessages.SELECT_SERVICE) {
+        return {
+            ...state,
+            proto: {
+                ...state.proto,
+                call: {
+                    ...state.proto.call,
+                    service: action.payload,
+                    method: '',
+                },
+            },
+        };
     } else if (action.type === ProtoMessages.SELECT_METHOD) {
         return {
             ...state,
@@ -53,8 +65,7 @@ export default function(state = DEFAULT_STATE, action) {
                 ...state.proto,
                 call: {
                     ...state.proto.call,
-                    service: action.payload.service,
-                    method: action.payload.method,
+                    method: action.payload,
                 },
             },
         };
