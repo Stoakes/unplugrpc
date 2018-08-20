@@ -8,8 +8,8 @@ import { PROTO_FOLDER } from "../config/config";
 
 /**
  * List every package stored in database
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const list = (req: Request, res: Response) => {
 
@@ -28,8 +28,8 @@ export const list = (req: Request, res: Response) => {
  * This methods does not return the full package object, but only:
  *   - its attributes (PROTO_Folder truncated from filePath)
  *   - its services and their attributes
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const show = (req: Request, res: Response) => {
 
