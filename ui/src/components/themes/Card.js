@@ -5,14 +5,19 @@ export class Card extends Component {
     render() {
         return (
             <div className={'card' + (this.props.plain ? ' card-plain' : '')}>
-                <div
-                    className={
-                        'header' + (this.props.hCenter ? ' text-center' : '')
-                    }
-                >
-                    <h4 className="title">{this.props.title}</h4>
-                    <p className="category">{this.props.category}</p>
-                </div>
+                {this.props.title !== '' || this.props.category !== '' ? (
+                    <div
+                        className={
+                            'header' +
+                            (this.props.hCenter ? ' text-center' : '')
+                        }
+                    >
+                        <h4 className="title">{this.props.title}</h4>
+                        <p className="category">{this.props.category}</p>
+                    </div>
+                ) : (
+                    ''
+                )}
                 <div
                     className={
                         'content' +
@@ -28,14 +33,18 @@ export class Card extends Component {
                 >
                     {this.props.children}
 
-                    <div className="footer">
-                        {this.props.legend}
-                        {this.props.stats != null ? <hr /> : ''}
-                        <div className="stats">
-                            <i className={this.props.statsIcon} />{' '}
-                            {this.props.stats}
+                    {this.props.legend !== '' ? (
+                        <div className="footer">
+                            {this.props.legend}
+                            {this.props.stats != null ? <hr /> : ''}
+                            <div className="stats">
+                                <i className={this.props.statsIcon} />{' '}
+                                {this.props.stats}
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        ''
+                    )}
                 </div>
             </div>
         );
@@ -47,6 +56,7 @@ Card.propTypes = {
     hCenter: PropTypes.string,
     title: PropTypes.string,
     category: PropTypes.string,
+    children: PropTypes.any,
     ctAllIcons: PropTypes.string,
     ctTableFullWidth: PropTypes.string,
     ctTableResponsive: PropTypes.string,

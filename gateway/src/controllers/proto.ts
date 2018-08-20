@@ -122,23 +122,29 @@ export const api = (req: Request, res: Response) => {
   if (triplet === undefined ) {
     return;
   }
+  req.checkHeaders("x-host", "Host should not be empty").notEmpty();
+  req.checkBody("message", "Payload is not valid JSON").isJSON();
+  const errors = req.validationErrors() as any[];
+  if (errors) {
+    res.status(400).json({level: `error`, message: errors[0].msg});
+    return;
+  }
 
   try {
-  const proto = grpcService.load(triplet.package.filePath);
-  const client = new (proto[triplet.package.name])[triplet.service.name]("localhost:50051", grpc.credentials.createInsecure());
-  const answer = client[triplet.method.name]({name: "antoine"}, {}, (err: any, ans: any) => {
-    if (err) {
-      console.error(red(`${triplet.service.name}.${triplet.method.name}`, err.message));
-      console.trace();
-      return res.status(500).json({ code: err.code, message: err.message });
-    }
-    res.json(ans);
-  });
-} catch (error) {
+    const proto = grpcService.load(triplet.package.filePath);
+    const client = new (proto[triplet.package.name])[triplet.service.name](req.get("x-host"), grpc.credentials.createInsecure());
+    client[triplet.method.name](JSON.parse(req.body.message), {}, (err: any, ans: any) => {
+      if (err) {
+        console.error(red(`${triplet.service.name}.${triplet.method.name}`, err.message));
+        console.trace();
+        return res.status(400).json({ code: err.code, message: err.message });
+      }
+      res.json(ans);
+    });
+  } catch (error) {
     console.error(red(`${triplet.service.name}.${triplet.method.name}`, error.message));
     console.trace();
-    res.status(500);
-    res.json({level: `error`, message: `An error occured. ${error.message}`});
+    res.status(400).json({level: `error`, message: `An error occured. ${error.message}`});
     return;
   }
 };

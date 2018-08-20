@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
 
-import { FormInput } from '../components/FormInput/FormInput.js';
-import Button from '../components/CustomButton/CustomButton.js';
+import { FormInput } from '../components/inputs/FormInput.js';
+import Button from '../components/themes/CustomButton.js';
 
 const required = value =>
     value || typeof value === 'number' ? undefined : 'Required';

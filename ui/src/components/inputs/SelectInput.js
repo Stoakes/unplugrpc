@@ -2,36 +2,41 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
-export class FormInput extends Component {
+export class SelectInput extends Component {
     render() {
-        const { placeholder, type, input, label, meta } = this.props;
-
+        const { disabled, input, label, meta, placeholder } = this.props;
         return (
             <FormGroup controlId={input.name}>
                 <ControlLabel>{label}</ControlLabel>
                 <FormControl
-                    type={type}
+                    componentClass="select"
                     placeholder={placeholder}
                     value={input.value}
                     onChange={input.onChange}
-                />
+                    disabled={disabled}
+                >
+                    {this.props.children}
+                </FormControl>
                 {meta.touched && (meta.error && <span>{meta.error}</span>)}
             </FormGroup>
         );
     }
 }
 
-FormInput.propTypes = {
-    placeholder: PropTypes.string,
-    type: PropTypes.string,
+SelectInput.propTypes = {
+    children: PropTypes.any,
+    disabled: PropTypes.bool,
     input: PropTypes.object,
     label: PropTypes.string,
     meta: PropTypes.object,
+    placeholder: PropTypes.string,
 };
 
-FormInput.defaultProps = {
-    placeholder: '',
+SelectInput.defaultProps = {
+    children: '',
+    disabled: false,
     meta: {},
+    placeholder: '',
 };
 
-export default FormInput;
+export default SelectInput;

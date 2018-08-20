@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NotifySystem from 'react-notification-system';
 
-import { hide } from '../actions/notifications';
+import { hide } from '../../actions/notifications';
 
 export default class Notifications extends React.Component {
     system() {

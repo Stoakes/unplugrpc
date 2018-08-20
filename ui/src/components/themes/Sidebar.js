@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
-import HeaderLinks from '../Header/HeaderLinks';
+import HeaderLinks from './HeaderLinks';
 import logo from '../../assets/img/reactlogo.png';
 import dashboardRoutes from '../../routes/dashboard.js';
 

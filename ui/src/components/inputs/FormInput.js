@@ -2,35 +2,39 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
-export class TextareaInput extends Component {
+export class FormInput extends Component {
     render() {
-        const { placeholder, rows, input, label } = this.props;
+        const { disabled, input, label, meta, placeholder, type } = this.props;
 
         return (
             <FormGroup controlId={input.name}>
                 <ControlLabel>{label}</ControlLabel>
                 <FormControl
-                    componentClass="textarea"
-                    rows={rows}
+                    type={type}
                     placeholder={placeholder}
                     value={input.value}
                     onChange={input.onChange}
+                    disabled={disabled}
                 />
+                {meta.touched && (meta.error && <span>{meta.error}</span>)}
             </FormGroup>
         );
     }
 }
 
-TextareaInput.propTypes = {
-    placeholder: PropTypes.string,
-    rows: PropTypes.number,
+FormInput.propTypes = {
+    disabled: PropTypes.bool,
     input: PropTypes.object,
     label: PropTypes.string,
+    meta: PropTypes.object,
+    placeholder: PropTypes.string,
+    type: PropTypes.string,
 };
 
-TextareaInput.defaultProps = {
+FormInput.defaultProps = {
+    disabled: false,
+    meta: {},
     placeholder: '',
-    rows: 10,
 };
 
-export default TextareaInput;
+export default FormInput;

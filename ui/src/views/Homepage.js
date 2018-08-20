@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col, Alert } from 'react-bootstrap';
 
-import { Card } from '../components/Card/Card.js';
+import { Card } from '../components/themes/Card.js';
 
 class Dashboard extends Component {
     render() {

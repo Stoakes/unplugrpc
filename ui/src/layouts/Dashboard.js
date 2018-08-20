@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import NotificationSystem from '../containers/NotificationSystemContainer';
 
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
-import Sidebar from '../components/Sidebar/Sidebar';
+import Header from '../components/themes/Header';
+import Footer from '../components/themes/Footer';
+import Sidebar from '../components/themes/Sidebar';
 
 import dashboardRoutes from '../routes/dashboard.js';
 

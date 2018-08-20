@@ -1,7 +1,7 @@
 import Homepage from '../views/Homepage';
 import AddProto from '../containers/AddProtoContainer';
 import Hosts from '../containers/HostsContainer';
-import UseProto from '../views/UseProto';
+import UseProto from '../containers/UseProtoContainer';
 
 const dashboardRoutes = [
     {

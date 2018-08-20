@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, Grid, Row, Table } from 'react-bootstrap';
 
-import Card from '../components/Card/Card.js';
+import Card from '../components/themes/Card.js';
 import AddHostForm from '../forms/AddHostForm.js';
 
 class View extends Component {

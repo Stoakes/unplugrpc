@@ -1,6 +1,6 @@
 /**
  * CRUD on hosts
- * A host is
+ * A host is a name (assumed resolvable or an ip) and a port
  */
 import { Request, Response } from "express";
 import { body } from "express-validator/check";
