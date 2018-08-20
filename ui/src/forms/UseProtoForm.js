@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Row, Col } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 
 import { TextareaInput } from '../components/inputs/TextareaInput.js';
 import Button from '../components/themes/CustomButton.js';
+import RequestDisplay from '../components/apps/RequestDisplay.js';
 
 function canSubmit(callParameters) {
     return (
@@ -22,16 +24,24 @@ function canSubmit(callParameters) {
 let UseProto = props => {
     return (
         <form onSubmit={props.handleSubmit(props.onSubmit)}>
-            <Field
-                name="message"
-                id="message"
-                component={TextareaInput}
-                label="Message"
-                placeholder="Your message"
-                rows={15}
-                disabled={props.callParameters.method === '' ? true : false}
-            />
-            <br />
+            <Row>
+                <Col md={8}>
+                    <Field
+                        name="message"
+                        id="message"
+                        component={TextareaInput}
+                        label="Message"
+                        placeholder="Your message"
+                        rows={15}
+                        disabled={
+                            props.callParameters.method === '' ? true : false
+                        }
+                    />
+                </Col>
+                <Col md={4}>
+                    <RequestDisplay selectedMethod={props.selectedMethod} />
+                </Col>
+            </Row>
             <Button
                 bsStyle="success"
                 fill
@@ -48,6 +58,7 @@ UseProto.propTypes = {
     callParameters: PropTypes.object,
     handleSubmit: PropTypes.func,
     onSubmit: PropTypes.func,
+    selectedMethod: PropTypes.object,
 };
 
 export default reduxForm({ form: 'useProto' })(UseProto);
