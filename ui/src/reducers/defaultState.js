@@ -2,6 +2,7 @@ export const DEFAULT_STATE = {
     hosts: [],
     proto: {
         packages: [],
+        selectedMethod: {},
         selectedPackage: {},
         call: {
             // method that will be called

@@ -93,6 +93,14 @@ export default function(state = DEFAULT_STATE, action) {
                 selectedPackage: action.payload,
             },
         };
+    } else if (action.type === ProtoMessages.SET_SELECTED_METHOD) {
+        return {
+            ...state,
+            proto: {
+                ...state.proto,
+                selectedMethod: action.payload,
+            },
+        };
     }
     return state;
 }

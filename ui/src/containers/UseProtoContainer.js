@@ -7,6 +7,7 @@ import {
     selectMethod,
     selectPackage,
     selectService,
+    setSelectedMethod,
 } from '../actions/proto';
 import { addNotification } from '../actions/notifications';
 import { setPackages, setSelectedPackage } from '../actions/packages';
@@ -18,6 +19,7 @@ function mapStateToProps(state, ownProps) {
         hosts: state.app.hosts,
         call: state.app.proto.call,
         packages: state.app.proto.packages,
+        selectedMethod: state.app.proto.selectedMethod,
         selectedPackage: state.app.proto.selectedPackage,
     };
 }
@@ -82,6 +84,24 @@ function mapDispatchToProps(dispatch) {
             }
             if (formValues.method !== callParameters.method) {
                 dispatch(selectMethod(formValues.method));
+                // Try to fetch method details
+                fetch(
+                    `${process.env.REACT_APP_API_URL}/api/${
+                        callParameters.package
+                    }.${callParameters.service}/${formValues.method}/`
+                )
+                    .then(response => response.json())
+                    .then(responseJson => {
+                        dispatch(setSelectedMethod(responseJson));
+                    })
+                    .catch(error =>
+                        dispatch(
+                            addNotification({
+                                message: error.message,
+                                level: 'error',
+                            })
+                        )
+                    );
             }
         },
         submit: (callParameters, formValues) => {

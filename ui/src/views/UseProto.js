@@ -71,6 +71,7 @@ class View extends Component {
                                     this.props.submit(callParameters, values);
                                 }}
                                 callParameters={callParameters}
+                                selectedMethod={this.props.selectedMethod}
                             />
                             <hr />
                             <pre>
@@ -91,6 +92,7 @@ View.propTypes = {
     hosts: PropTypes.array,
     packages: PropTypes.array,
     response: PropTypes.object,
+    selectedMethod: PropTypes.object,
     selectedPackage: PropTypes.object,
     selectHost: PropTypes.func,
     selectMethod: PropTypes.func,
