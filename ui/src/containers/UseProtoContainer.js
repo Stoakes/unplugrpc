@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { change } from 'redux-form';
 
 import View from '../views/UseProto';
 import { addHosts, selectHost } from '../actions/hosts';
@@ -92,7 +93,10 @@ function mapDispatchToProps(dispatch) {
                 )
                     .then(response => response.json())
                     .then(responseJson => {
+                        // store method details in store
                         dispatch(setSelectedMethod(responseJson));
+                        // set Textarea helper text
+                        setHelperText(responseJson, dispatch);
                     })
                     .catch(error =>
                         dispatch(
@@ -133,6 +137,27 @@ function mapDispatchToProps(dispatch) {
                 );
         },
     };
+}
+
+function setHelperText(responseJson, dispatch) {
+    if (
+        responseJson &&
+        responseJson.input !== undefined &&
+        responseJson.input.fields !== undefined
+    ) {
+        const helpText = `{\n${responseJson.input.fields.map(field => {
+            const typeText =
+                field.type === 'string'
+                    ? `""`
+                    : field.type === 'bool'
+                        ? `false`
+                        : field.type.contains('int')
+                            ? 0
+                            : `${field.type}`;
+            return `"${field.name}": ${typeText},\n`;
+        })}}`;
+        dispatch(change('useProto', 'message', helpText));
+    }
 }
 
 export default connect(
