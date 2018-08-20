@@ -64,21 +64,21 @@ class View extends Component {
                             </Card>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md={12}>
-                            <UseProtoForm
-                                onSubmit={values => {
-                                    this.props.submit(callParameters, values);
-                                }}
-                                callParameters={callParameters}
-                                selectedMethod={this.props.selectedMethod}
-                            />
-                            <hr />
-                            <pre>
-                                {JSON.stringify(this.props.response, null, 2)}
-                            </pre>
-                        </Col>
-                    </Row>
+                    <Card>
+                        <UseProtoForm
+                            onSubmit={values => {
+                                this.props.submit(callParameters, values);
+                            }}
+                            callParameters={callParameters}
+                            selectedMethod={this.props.selectedMethod}
+                        />
+                    </Card>
+                    <Card>
+                        <label>Response</label>
+                        <pre>
+                            {JSON.stringify(this.props.response, null, 2)}
+                        </pre>
+                    </Card>
                 </Grid>
             </div>
         );
