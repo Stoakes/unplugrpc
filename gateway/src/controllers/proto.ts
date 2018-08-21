@@ -134,6 +134,10 @@ export const api = (req: Request, res: Response) => {
     return;
   }
 
+  if(triplet.method.client_streaming) {
+    return res.status(400).json({level: `error`, message: `Client streaming is not supported yet.`});
+  }
+
   try {
     const proto = grpcService.load(triplet.package.filePath);
     const client = new (proto[triplet.package.name])[triplet.service.name](req.get("x-host"), grpc.credentials.createInsecure());
