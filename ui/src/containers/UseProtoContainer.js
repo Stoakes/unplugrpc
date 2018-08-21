@@ -140,22 +140,34 @@ function mapDispatchToProps(dispatch) {
 }
 
 function setHelperText(responseJson, dispatch) {
+    const intTypes = [
+        'int32',
+        'int64',
+        'uint32',
+        'uint64',
+        'sint32',
+        'sint64',
+        'fixed32',
+        'fixed64',
+    ];
     if (
         responseJson &&
         responseJson.input !== undefined &&
         responseJson.input.fields !== undefined
     ) {
-        const helpText = `{\n${responseJson.input.fields.map(field => {
+        const helpText = `{${responseJson.input.fields.map(field => {
             const typeText =
                 field.type === 'string'
                     ? `""`
                     : field.type === 'bool'
                         ? `false`
-                        : field.type.contains('int')
-                            ? 0
-                            : `${field.type}`;
-            return `"${field.name}": ${typeText},\n`;
-        })}}`;
+                        : field.type === 'double' || field.type === 'float'
+                            ? 0.0
+                            : intTypes.indexOf(field.type) !== -1
+                                ? 0
+                                : `${field.type}`;
+            return `\n"${field.name}": ${typeText}`;
+        })}\n}`;
         dispatch(change('useProto', 'message', helpText));
     }
 }
