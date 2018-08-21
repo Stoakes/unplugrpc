@@ -12,7 +12,7 @@ function mapDispatchToProps(dispatch) {
     return {
         addProto: formValues => {
             // TODO form values checks
-            fetch(process.env.REACT_APP_API_URL + '/new', {
+            fetch(process.env.REACT_APP_API_URL + '/protos', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
