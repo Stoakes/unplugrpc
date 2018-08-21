@@ -4,6 +4,7 @@
 import { Request, Response } from "express";
 import * as fs from "fs";
 import red from "chalk";
+import * as async from "async";
 
 import { PROTO_FOLDER } from "../config/config";
 import * as dbService from "../services/dbService";
@@ -141,14 +142,34 @@ export const api = (req: Request, res: Response) => {
   try {
     const proto = grpcService.load(triplet.package.filePath);
     const client = new (proto[triplet.package.name])[triplet.service.name](req.get("x-host"), grpc.credentials.createInsecure());
-    client[triplet.method.name](JSON.parse(req.body.message), {}, (err: any, ans: any) => {
-      if (err) {
-        console.error(red(`${triplet.service.name}.${triplet.method.name}`, err.message));
-        console.trace();
-        return res.status(400).json({ code: err.code, message: err.message });
-      }
-      res.json(ans);
-    });
+    
+    // Simple RPC
+    if(!triplet.method.server_streaming) {
+      client[triplet.method.name](JSON.parse(req.body.message), {}, (err: any, ans: any) => {
+        if (err) {
+          console.error(red(`${triplet.service.name}.${triplet.method.name}`, err.message));
+          console.trace();
+          return res.status(400).json({ code: err.code, message: err.message });
+        }
+        res.json(ans);
+      });
+      return;
+    }
+    else { // Server streaming
+      async.series([ () => {
+        let index = 0;// Thread-safe because of js one thread approach
+        const call = client[triplet.method.name](JSON.parse(req.body.message));
+        call.on('data', function(data: any) {
+            res.write(`${index !== 0 ? ',':'['}${JSON.stringify(data)}`)
+            index ++;
+        });
+        call.on('end', function() {
+          res.write(']')
+          res.end();
+        });
+      }]);
+      return;
+    }
   } catch (error) {
     console.error(red(`${triplet.service.name}.${triplet.method.name}`, error.message));
     console.trace();
