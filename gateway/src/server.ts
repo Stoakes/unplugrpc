@@ -1,7 +1,8 @@
-import newApp from "./app";
 import yargs from "yargs";
+import newApp from "./app";
 
-const argv = yargs.usage("Usage: $0 [options]")
+const argv = yargs
+  .usage("Usage: $0 [options]")
   .help("?")
   .alias("?", "help")
   .alias("?", "h")
@@ -22,9 +23,7 @@ const argv = yargs.usage("Usage: $0 [options]")
   .alias("quiet", "q")
 
   .boolean("cors")
-  .describe("cors", "Allow CORS")
-  .argv;
-
+  .describe("cors", "Allow CORS").argv;
 
 const app = newApp(argv.cors);
 
