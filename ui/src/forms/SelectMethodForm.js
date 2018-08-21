@@ -70,7 +70,14 @@ let SelectMethod = props => {
                     <option />
                     {props.methods.map(method => {
                         return (
-                            <option value={method.name} key={method.name}>
+                            <option
+                                value={method.name}
+                                key={method.name}
+                                disabled={
+                                    method.server_streaming ||
+                                    method.client_streaming
+                                }
+                            >
                                 {method.name}
                             </option>
                         );
