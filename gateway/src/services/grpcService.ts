@@ -3,13 +3,16 @@ import { PROTO_FOLDER } from "../config/config";
 /**
  * Functions for every grpc related interactions
  */
-"use strict";
 
 import * as fs from "fs";
+import * as grpc from "grpc";
+// tslint:disable-next-line
 const schema = require("protocol-buffers-schema");
-const grpc = require("grpc");
 
-export const protofileToSchema = (protofilePath: string, includePath: string = undefined) => {
+export const protofileToSchema = (
+  protofilePath: string,
+  includePath: string = undefined
+) => {
   try {
     grpc.load(protofilePath);
   } catch (error) {

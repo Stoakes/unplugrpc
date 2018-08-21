@@ -3,8 +3,8 @@
  */
 import { Request, Response } from "express";
 
-import * as dbService from "../services/dbService";
 import { PROTO_FOLDER } from "../config/config";
+import * as dbService from "../services/dbService";
 
 /**
  * List every package stored in database
