@@ -23,6 +23,7 @@ const newApp = (corsEnabled: boolean): express.Express => {
 
     // Routes
     app.get("/dashboard", dashboardController.index);
+    app.get("/protos", protoController.list);
     app.post("/protos", protoController.add);
     // These are the core methods, they have no side effects on the gateway state.
     app.post("/api/:package.:service/:method/", protoController.api);

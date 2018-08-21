@@ -97,7 +97,11 @@ export const lint = (req: Request, res: Response) => {
 
 export const list = (req: Request, res: Response) => {
   const db = dbService.openDb();
-  res.send(db.get("routes"));
+  const protos = db.get("packages").map((item: any) => {
+    return {name: item.name,
+      filePath: item.filePath.replace(PROTO_FOLDER, "")};
+  });
+  res.send(protos);
 };
 
 export const refresh = (req: Request, res: Response) => {
