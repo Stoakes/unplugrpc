@@ -25,9 +25,9 @@ export const add = (req: Request, res: Response) => {
     req.checkBody("name", "Name of the proto should only contains alphanumeric characters").matches(/^[0-9a-zA-Z]{1,40}$/, "i");
     req.checkBody("path", "Path should not be empty").notEmpty();
     req.checkBody("path", "Path should be between 7 and 40 characters long").isLength({ min: 7, max: 40 });
-    req.checkBody("path", "Path can not contains ..${[()]}\| characters").customSanitizer(
-      (value: string) => !new RegExp("/\\{|\\[|\\(|\\.\\.|\\]|\\)|\\}|\\$|\\/").test(value));
-    req.checkBody("path", "Path should end with .proto").customSanitizer((value: string) => value.endsWith(".proto"));
+    req.checkBody("path", "Path can not contains ..${[()]}\| characters").not()
+      .matches(/\\{|\\[|\\(|\\.\\.|\\]|\\)|\\}|\\$|\\/);
+    req.checkBody("path", "Path should end with .proto").matches(/^.*\.proto$/);
     req.checkBody("proto", "Content of the protofile not be blank").notEmpty();
     req.checkBody("proto", "Content of the protofile should be at least 20 characters long").isLength({ min: 20 });
 
