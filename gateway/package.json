@@ -2,9 +2,9 @@
   "name": "unplugrpc-gateway",
   "version": "0.1.0",
   "description": "Expose your gRPC endpoints through a HTTP API",
-  "main": "index.js",
+  "main": "dist/server.js",
   "bin": {
-    "unplugrpc-gateway": "index.js"
+    "unplugrpc-gateway": "dist/server.js"
   },
   "scripts": {
     "start": "node ./dist/server.js",
