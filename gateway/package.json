@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node ./dist/server.js",
     "dev": "node ./dist/server.js --cors",
-    "build": "npm run build:ui && npm run build:gateway && echo \"Done.\"",
+    "build": "npm run build:ui && npm run build:gateway",
     "build:ui": "mkdir -p build-ui; cd ../ui; yarn install && yarn build; cp -R build/* ../gateway/build-ui; cd ../gateway",
     "build:gateway": "tsc && npm run lint",
     "test": "jest --forceExit --coverage --verbose",

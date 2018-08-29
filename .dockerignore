@@ -1,0 +1,14 @@
+*
+!gateway/data/db.json.dist
+!gateway/data/protoFolder
+gateway/data/protoFolder/*.proto
+!gateway/src
+!gateway/*.json
+!gateway/*.md
+!gateway/*.js
+
+!ui/*.json
+!ui/*.lock
+!ui/.*
+!ui/src
+!ui/public
