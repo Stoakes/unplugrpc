@@ -87,7 +87,7 @@ function mapDispatchToProps(dispatch) {
                 dispatch(selectMethod(formValues.method));
                 // Try to fetch method details
                 fetch(
-                    `${process.env.REACT_APP_API_URL}/api/${
+                    `${process.env.REACT_APP_API_URL}/${
                         callParameters.package
                     }.${callParameters.service}/${formValues.method}/`
                 )
@@ -110,9 +110,9 @@ function mapDispatchToProps(dispatch) {
         },
         submit: (callParameters, formValues) => {
             fetch(
-                `${process.env.REACT_APP_API_URL}/api/${
-                    callParameters.package
-                }.${callParameters.service}/${callParameters.method}/`,
+                `${process.env.REACT_APP_API_URL}/${callParameters.package}.${
+                    callParameters.service
+                }/${callParameters.method}/`,
                 {
                     method: 'POST',
                     headers: {
