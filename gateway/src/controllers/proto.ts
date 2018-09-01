@@ -158,7 +158,7 @@ export const refresh = (req: Request, res: Response) => {
 };
 
 /**
- * Use an api point: POST /api/<package>.<proto service>/<method>
+ * Call a grpc method from a dynamically loaded description.
  * @param req
  * @param res
  */
@@ -175,13 +175,6 @@ export const api = (req: Request, res: Response) => {
     return;
   }
 
-  if (triplet.method.client_streaming) {
-    return res.status(400).json({
-      level: `error`,
-      message: `Client streaming is not supported yet.`
-    });
-  }
-
   try {
     const proto = grpcService.load(triplet.package.filePath);
     const client = new proto[triplet.package.name][triplet.service.name](
@@ -190,11 +183,11 @@ export const api = (req: Request, res: Response) => {
     );
 
     // Simple RPC
-    if (!triplet.method.server_streaming) {
+    if (!triplet.method.server_streaming && !triplet.method.client_streaming) {
       client[triplet.method.name](
         JSON.parse(req.body.message),
         {},
-        (err: any, ans: any) => {
+        (err: any, answer: any) => {
           if (err) {
             console.error(
               red(`${triplet.service.name}.${triplet.method.name}`, err.message)
@@ -204,12 +197,14 @@ export const api = (req: Request, res: Response) => {
               .status(400)
               .json({ code: err.code, message: err.message });
           }
-          res.json(ans);
+          res.json(answer);
         }
       );
       return;
-    } else {
-      // Server streaming
+    }
+
+    // Server streaming only
+    if (triplet.method.server_streaming && !triplet.method.client_streaming) {
       async.series([
         () => {
           let index = 0; // Thread-safe because of js one thread approach
@@ -228,6 +223,39 @@ export const api = (req: Request, res: Response) => {
       ]);
       return;
     }
+
+    // Client streaming only
+    if (!triplet.method.server_streaming && triplet.method.client_streaming) {
+      const call = client[triplet.method.name]((err: any, answer: any) => {
+        if (err) {
+          return res.status(400).json({ code: err.code, message: err.message });
+        }
+        res.json(answer);
+        return;
+      });
+
+      // Items have been sent in an array (stream representation), and are send independantly.
+      const items = JSON.parse(req.body.message);
+      async.series(
+        items.map((item: any) => {
+          return (callback: any) => {
+            call.write(item);
+            callback();
+          };
+        }),
+        () => {
+          call.end();
+        }
+      );
+    }
+
+    // Bi-directionnal
+    if (triplet.method.server_streaming && triplet.method.client_streaming) {
+      return res.status(400).json({
+        level: `error`,
+        message: `Bi-directionnal streaming is not supported yet.`
+      });
+    }
   } catch (error) {
     console.error(
       red(`${triplet.service.name}.${triplet.method.name}`, error.message)
@@ -241,7 +269,7 @@ export const api = (req: Request, res: Response) => {
 };
 
 /**
- * Get description for an api point: GET /api/<package>.<proto service>/<method>/
+ * Get description for an api point: GET /<package>.<proto service>/<method>/
  * @param req
  * @param res
  */
