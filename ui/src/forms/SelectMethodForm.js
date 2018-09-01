@@ -73,7 +73,10 @@ let SelectMethod = props => {
                             <option
                                 value={method.name}
                                 key={method.name}
-                                disabled={method.client_streaming}
+                                disabled={
+                                    method.client_streaming &&
+                                    method.server_streaming
+                                }
                             >
                                 {method.name}
                             </option>

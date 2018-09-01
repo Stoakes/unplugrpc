@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 
 import { TextareaInput } from '../components/inputs/TextareaInput.js';
@@ -37,6 +37,16 @@ let UseProto = props => {
                             props.callParameters.method === '' ? true : false
                         }
                     />
+                    {props.selectedMethod &&
+                    props.selectedMethod.method !== undefined &&
+                    props.selectedMethod.method.client_streaming ? (
+                        <Alert bsStyle="info">
+                            This method expects a stream of objects, represented
+                            here as an array. More details in the doc.
+                        </Alert>
+                    ) : (
+                        ''
+                    )}
                 </Col>
                 <Col md={4}>
                     <RequestDisplay selectedMethod={props.selectedMethod} />

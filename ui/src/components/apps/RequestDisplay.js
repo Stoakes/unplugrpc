@@ -45,6 +45,16 @@ class RequestDisplay extends React.Component {
                 <label>Request</label>
                 <pre>
                     {this.props.selectedMethod &&
+                    this.props.selectedMethod.method !== undefined &&
+                    this.props.selectedMethod.method.client_streaming ? (
+                        <span style={{ color: 'green' }}>
+                            # Stream of
+                            <br />
+                        </span>
+                    ) : (
+                        ''
+                    )}
+                    {this.props.selectedMethod &&
                         this.props.selectedMethod.input !== undefined &&
                         this.reduceInput(this.props.selectedMethod.input)}
                 </pre>

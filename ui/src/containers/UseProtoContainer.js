@@ -155,7 +155,12 @@ function setHelperText(responseJson, dispatch) {
         responseJson.input !== undefined &&
         responseJson.input.fields !== undefined
     ) {
-        const helpText = `{${responseJson.input.fields.map(field => {
+        let helpText =
+            responseJson.method !== undefined &&
+            responseJson.method.client_streaming
+                ? `[\n`
+                : '';
+        helpText += `{${responseJson.input.fields.map(field => {
             const typeText =
                 field.type === 'string'
                     ? `""`
@@ -168,6 +173,11 @@ function setHelperText(responseJson, dispatch) {
                                 : `${field.type}`;
             return `\n"${field.name}": ${typeText}`;
         })}\n}`;
+        helpText +=
+            responseJson.method !== undefined &&
+            responseJson.method.client_streaming
+                ? `\n]`
+                : '';
         dispatch(change('useProto', 'message', helpText));
     }
 }
