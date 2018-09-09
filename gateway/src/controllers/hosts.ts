@@ -17,6 +17,7 @@ export const add = (req: Request, res: Response) => {
   body("port").toInt();
   body("port").isPort();
   req.checkBody("host", "Host can not be empty").notEmpty();
+  req.checkBody("port", "Port can not be empty").notEmpty();
 
   const errors = req.validationErrors() as any[];
   if (errors) {
