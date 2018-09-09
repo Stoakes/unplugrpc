@@ -1,11 +1,18 @@
 # UnplugRPC
 
-UnplugRPC is a tool to expose your gRPC endpoints through an HTTP API, making theim more accessible. It has no production purpose, but is suited for manual manipulation or tests of a gRPC service. It can be used as Postman for gRPC.
+[![Travis-ci status](https://travis-ci.org/Stoakes/unplugrpc.svg?branch=master)](https://travis-ci.org/Stoakes/unplugrpc)
+[![Licence](https://img.shields.io/badge/Licence-GNU%20AGPL%20v3-red.svg)](LICENCE)
+
+UnplugRPC is a gateway to expose your gRPC endpoints through an HTTP API, making them more accessible.
+It has no production purpose, but is suited for manual manipulation or tests of gRPC services.
+
+With its user interface UnplugRPC can be used as a small Postman for gRPC.
+If you are looking for all the Postman features, see the doc for more details about UnplugRPC API.
 
 ## Install
 
 ```bash
-# Assuming NodeJs is installed
+# Assuming NodeJs 8 is installed
 git clone https://github.com/Stoakes/unplugrpc.git
 cd unplugrpc/gateway
 npm install
@@ -13,13 +20,23 @@ npm run build
 npm start
 ```
 
-## Electron app
-
 ## Docker image
 
-Coming later on.
+```bash
+docker run stoakes/unplugrpc
+# Then open your browser at http://localhost:8000
+```
 
-## Licence
+## Run on Kubernetes cluster
+
+```bash
+# Assuming you what you are doing
+kubectl run unplugrpc --image stoakes/unplugrpc:latest --port 8000
+kubectl expose deployment unplugrpc --type NodePort --port 8000
+# Find which port is assigned to unplugrpc service
+kubectl get service
+# Visit unplugrpc at http://[EXTERNAL_IP]:[NODE_PORT]
+```
 
 ## Credits
 
