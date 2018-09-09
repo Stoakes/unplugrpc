@@ -22,29 +22,21 @@ import { Schema } from "../types/types";
  * @param res HTTP response
  */
 export const add = (req: Request, res: Response) => {
-  req.checkBody("name", "Name of the protofile cannot be blank").notEmpty();
   req
     .checkBody(
       "name",
-      "Name of the protofile should be between 1 and 40 characters long"
+      "Name should only contain alphanumeric characters and dots"
     )
-    .isLength({ min: 1, max: 40 });
-  req
-    .checkBody(
-      "name",
-      "Name of the proto should only contains alphanumeric characters"
-    )
-    .matches("/^[0-9a-zA-Z]{1,40}$/", "i");
+    .matches("^[0-9a-zA-Z-\\.]{0,40}$", "i");
   req.checkBody("path", "Path should not be empty").notEmpty();
-  req
-    .checkBody("path", "Path should be between 7 and 40 characters long")
-    .isLength({ min: 7, max: 40 });
+  req.checkBody("path", "Path should end with .proto").matches("^.*\\.proto$");
   req
     //  tslint:disable-next-line
-    .checkBody("path", "Path can not contains ..${[()]}| characters")
-    .not()
-    .matches("/\\{|\\[|\\(|\\.\\.|\\]|\\)|\\}|\\$|\\/");
-  req.checkBody("path", "Path should end with .proto").matches("/^.*.proto$/");
+    .checkBody(
+      "path",
+      "Path should be between 7 and 63 characters long, only contain alphanumeric characters, dots dashs underscores and slashes characters"
+    )
+    .matches("^[0-9a-zA-Z.-/_]{7,63}$");
   req.checkBody("proto", "Content of the protofile not be blank").notEmpty();
   req
     .checkBody(
@@ -55,17 +47,21 @@ export const add = (req: Request, res: Response) => {
 
   const errors = req.validationErrors() as any[];
   if (errors) {
-    res.status(400);
-    res.json({ level: `error`, message: errors[0].msg });
+    res.status(400).json({ level: `error`, message: errors[0].msg });
     return;
   }
 
   const filePath = path.join(PROTO_FOLDER, req.body.path);
 
+  req.body.name =
+    req.body.name === undefined ||
+    req.body.name === "" ||
+    req.body.name === "undefined"
+      ? path.basename(filePath)
+      : req.body.name;
   // If file already exists and no force flag, return an error
   if (fs.existsSync(filePath) && req.query.force === undefined) {
-    res.status(400);
-    res.json({
+    res.status(400).json({
       level: `error`,
       message: `File ${
         req.body.name
@@ -78,8 +74,7 @@ export const add = (req: Request, res: Response) => {
     const err = fileService.createFolderTree(filePath);
     if (err) {
       console.log(err);
-      res.status(400);
-      res.json({
+      res.status(400).json({
         level: `error`,
         message: `Can't create folder tree on server. Check write permissions.`
       });
@@ -89,8 +84,7 @@ export const add = (req: Request, res: Response) => {
 
   fs.writeFile(filePath, req.body.proto, err => {
     if (err) {
-      res.status(400);
-      res.json({
+      res.status(400).json({
         level: `error`,
         message: `Can't write file on server. Check write permissions.`
       });
@@ -109,15 +103,13 @@ export const add = (req: Request, res: Response) => {
           console.log(error);
         }
       });
-      res.status(400);
-      res.json({
+      res.status(400).json({
         level: `error`,
         message: `Error while loading file: ${error.message}`
       });
       return;
     }
-    res.status(200);
-    res.json({ level: `success`, message: `File loaded`, schema });
+    res.status(200).json({ level: `success`, message: `File loaded`, schema });
   });
 };
 
