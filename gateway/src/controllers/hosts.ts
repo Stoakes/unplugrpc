@@ -74,7 +74,7 @@ export const update = (req: Request, res: Response) => {
   req.checkBody("port", "Port is not recognized as valid port").isPort();
   req
     .checkParams("port", "Port parameter is not recognized as valid port")
-    .isPort();
+    .isPort(); // used as equivalent of isInt()
 
   const errors = req.validationErrors() as any[];
   if (errors) {
@@ -130,6 +130,18 @@ export const update = (req: Request, res: Response) => {
  * @param res
  */
 export const remove = (req: Request, res: Response) => {
+  req
+    .checkParams("port", "Port parameter is not recognized as valid port")
+    .isPort(); // used as equivalent of isInt()
+
+  const errors = req.validationErrors() as any[];
+  if (errors) {
+    res.status(400);
+    res.json({ level: `error`, message: errors[0].msg });
+    return;
+  }
+  req.params.port = parseInt(req.params.port, 10);
+
   try {
     const host = dbService
       .get("hosts")
