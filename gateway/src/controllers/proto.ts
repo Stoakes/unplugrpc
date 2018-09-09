@@ -6,6 +6,7 @@ import red from "chalk";
 import { Request, Response } from "express";
 import * as fs from "fs";
 import * as grpc from "grpc";
+import * as path from "path";
 
 import { PROTO_FOLDER } from "../config/config";
 import * as dbService from "../services/dbService";
@@ -59,7 +60,7 @@ export const add = (req: Request, res: Response) => {
     return;
   }
 
-  const filePath = PROTO_FOLDER + "/" + req.body.path;
+  const filePath = path.join(PROTO_FOLDER, req.body.path);
 
   // If file already exists and no force flag, return an error
   if (fs.existsSync(filePath) && req.query.force === undefined) {
