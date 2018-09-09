@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "UnplugRPC",
+  "name": "Use your gRPC endpoints with ease",
   "icons": [
     {
       "src": "favicon.ico",
