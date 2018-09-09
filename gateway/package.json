@@ -12,7 +12,7 @@
     "build": "npm run build:ui && npm run build:gateway",
     "build:ui": "mkdir -p build-ui; cd ../ui; yarn install && yarn build; cp -R build/* ../gateway/build-ui; cd ../gateway",
     "build:gateway": "tsc",
-    "test": "jest --forceExit --coverage --verbose",
+    "test": "jest --forceExit --coverage --verbose --runInBand",
     "test:watch": "jest  --watch --coverage --verbose",
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
