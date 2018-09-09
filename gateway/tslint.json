@@ -40,6 +40,7 @@
     "no-null-keyword": true,
     "prefer-const": true,
     "jsdoc-format": true,
-    "interface-name": false
+    "interface-name": false,
+    "no-implicit-dependencies": [true, "dev"]
   }
 }
