@@ -36,7 +36,7 @@ let AddProto = props => {
                 name="proto"
                 id="proto"
                 component={TextareaInput}
-                label="Textarea"
+                label="Protofile content"
                 placeholder="Your protofile content"
                 rows={20}
             />
