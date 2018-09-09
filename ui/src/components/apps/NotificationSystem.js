@@ -7,7 +7,7 @@ import { hide } from '../../actions/notifications';
 export default class Notifications extends React.Component {
     system() {
         // eslint-disable-next-line
-        return this.refs.notify;
+    return this.refs.notify;
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
@@ -51,8 +51,8 @@ export default class Notifications extends React.Component {
 
     render() {
         const { notifications, ...rest } = this.props;
-
-        return <NotifySystem ref="notify" {...rest} />;
+        // eslint-disable-next-line
+    return <NotifySystem ref="notify" {...rest} />;
     }
 }
 
