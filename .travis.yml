@@ -16,7 +16,7 @@ script:
   - npm run lint
   - npm run test
   - cd ../ui
-  - npm install
+  - yarn install
   - npm run lint
   - npm run test
 
