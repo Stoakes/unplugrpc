@@ -13,6 +13,7 @@
     "build:ui": "mkdir -p build-ui; cd ../ui; yarn install && yarn build; cp -R build/* ../gateway/build-ui; cd ../gateway",
     "build:gateway": "tsc",
     "test": "jest --forceExit --coverage --verbose",
+    "test:watch": "jest  --watch --coverage --verbose",
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint-fix": "tslint -c tslint.json -p tsconfig.json --fix"
@@ -47,6 +48,7 @@
     "@types/body-parser": "^1.16.8",
     "@types/cors": "^2.8.4",
     "@types/express": "^4.16.0",
+    "@types/jest": "^23.3.2",
     "@types/lowdb": "^1.0.4",
     "@types/mkdirp": "0.5.2",
     "@types/node": "^10.5.4",
