@@ -12,7 +12,7 @@ If you are looking for all the Postman features, see the doc for more details ab
 ## Install
 
 ```bash
-# Assuming NodeJs 8 is installed
+# Assuming NodeJs 8 and Yarn are installed
 git clone https://github.com/Stoakes/unplugrpc.git
 cd unplugrpc/gateway
 npm install
@@ -20,10 +20,12 @@ npm run build
 npm start
 ```
 
+[Detailled installation available in the documentation](docs)
+
 ## Docker image
 
 ```bash
-docker run stoakes/unplugrpc
+docker run -p 8000:8000 stoakes/unplugrpc
 # Then open your browser at http://localhost:8000
 ```
 
