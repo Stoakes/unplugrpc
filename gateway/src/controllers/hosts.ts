@@ -22,8 +22,7 @@ export const add = (req: Request, res: Response) => {
 
   const errors = req.validationErrors() as any[];
   if (errors) {
-    res.status(400);
-    res.json({ level: `error`, message: errors[0].msg });
+    res.status(400).json({ level: `error`, message: errors[0].msg });
     return;
   }
 
@@ -43,17 +42,18 @@ export const add = (req: Request, res: Response) => {
         .push({ name: req.body.name, host: req.body.host, port: req.body.port })
         .write();
       res.json({ level: `success`, message: `Host added to the list` });
-    } else {
-      res.status(400);
-      res.json({
-        level: `error`,
-        message: `An host with similar host and port already exists`
-      });
+      return;
     }
+    res.status(400).json({
+      level: `error`,
+      message: `An host with similar host and port already exists`
+    });
+    return;
   } catch (error) {
     console.log(error);
-    res.status(400);
-    res.json({ level: `error`, message: `An error occured. ${error.message}` });
+    res
+      .status(400)
+      .json({ level: `error`, message: `An error occured. ${error.message}` });
   }
 };
 
