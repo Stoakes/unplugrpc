@@ -36,8 +36,37 @@ Assuming you have Golang installed.
 9. Navigate to the _Use_ tab.
 10. Select the host you previously created.
 11. Select the package you want to use; in our case the `routeguide` package.
-12. Select a service and a method. (`RouteChat` method is not available because UnplugRPC does not support bi-directionnal method yet.)
-13. Based on the request object, create your own request and submit. The result should appear at the bottom of the page.
+12. Select a service and a method. (`RouteChat` method is not available because UnplugRPC does not support bi-directionnal methods yet.)
+13. Based on the request object, create your own request and submit it. The result should appear at the bottom of the page.
+
+**Examples**
+
+_Copied from grpc.io_
+
+- `routeguide.RouteGuide/GetFeatures`: Simple RPC: Return the feature of a point.
+
+  ```
+  {"latitude": 409146138, "longitude": -746188906}
+  ```
+
+- `routeguide.RouteGuide/ListFeatures`: Server streaming: Return features between 40, -75 and 42, -73.
+
+  ```
+  { "lo": { "latitude": 400000000, "longitude": -750000000 },
+    "hi": { "latitude": 420000000, "longitude": -730000000 } }
+  ```
+
+- `routeguide.RouteGuide/RecordRoute`: Client streaming: Return the distance and features visited of a route.
+
+  ```
+  [
+    { "latitude": 477482524, "longitude": -33702448 },
+    { "latitude": 48117266, "longitude": -16777925 },
+    { "latitude": 48856614, "longitude": 23522219 },
+    { "latitude": 48135125, "longitude": 11581980 },
+    { "latitude": 43604652, "longitude": 14442090 }
+  ]
+  ```
 
 ## Features
 
