@@ -204,9 +204,11 @@ export const api = (req: Request, res: Response) => {
           const call = client[triplet.method.name](
             JSON.parse(req.body.message)
           );
+          res.write("[");
           call.on("data", (data: any) => {
-            res.write(`${index !== 0 ? "," : "["}${JSON.stringify(data)}`);
+            const delimiter = index !== 0 ? "," : "";
             index++;
+            res.write(`${delimiter}${JSON.stringify(data)}`);
           });
           call.on("end", () => {
             res.write("]");
