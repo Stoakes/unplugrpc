@@ -59,7 +59,8 @@ function mapDispatchToProps(dispatch) {
                 dispatch(selectHost(data[0], data[1]));
             }
         },
-        selectMethod: (formValues, callParameters) => {
+        /** messages: the array of message in the selected package */
+        selectMethodCore: (formValues, callParameters, messages) => {
             if (formValues.package !== callParameters.package) {
                 dispatch(selectPackage(formValues.package));
                 fetch(
@@ -96,7 +97,7 @@ function mapDispatchToProps(dispatch) {
                         // store method details in store
                         dispatch(setSelectedMethod(responseJson));
                         // set Textarea helper text
-                        setHelperText(responseJson, dispatch);
+                        setHelperText(responseJson, dispatch, messages);
                     })
                     .catch(error =>
                         dispatch(
@@ -139,17 +140,7 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-function setHelperText(responseJson, dispatch) {
-    const intTypes = [
-        'int32',
-        'int64',
-        'uint32',
-        'uint64',
-        'sint32',
-        'sint64',
-        'fixed32',
-        'fixed64',
-    ];
+function setHelperText(responseJson, dispatch, messages) {
     if (
         responseJson &&
         responseJson.input !== undefined &&
@@ -161,16 +152,7 @@ function setHelperText(responseJson, dispatch) {
                 ? `[\n`
                 : '';
         helpText += `{${responseJson.input.fields.map(field => {
-            const typeText =
-                field.type === 'string'
-                    ? `""`
-                    : field.type === 'bool'
-                        ? `false`
-                        : field.type === 'double' || field.type === 'float'
-                            ? 0.0
-                            : intTypes.indexOf(field.type) !== -1
-                                ? 0
-                                : `${field.type}`;
+            const typeText = messageType(messages, field.type, 0);
             return `\n"${field.name}": ${typeText}`;
         })}\n}`;
         helpText +=
@@ -182,7 +164,59 @@ function setHelperText(responseJson, dispatch) {
     }
 }
 
+const messageType = (messages, type, depth) => {
+    const intTypes = [
+        'int32',
+        'int64',
+        'uint32',
+        'uint64',
+        'sint32',
+        'sint64',
+        'fixed32',
+        'fixed64',
+    ];
+    const maxDepth = 20;
+    if (type === 'string') {
+        return `""`;
+    }
+    if (type === 'bool') {
+        return `false`;
+    }
+    if (type === 'double' || type === 'float') {
+        return `0.0`;
+    }
+    if (intTypes.indexOf(type) !== -1) {
+        return `0`;
+    }
+    const matchedTypes = messages.filter(message => message.name === type);
+    if (depth < maxDepth && matchedTypes.length === 1) {
+        return `{${matchedTypes[0].fields.map(field => {
+            const typeText = messageType(messages, field.type, depth + 1);
+            return `\n${'\t'.repeat(depth + 1)}"${field.name}": ${typeText}`;
+        })}\n}`;
+    }
+    return `${type}`;
+};
+
+const mergeProps = (stateProps, dispatchProps) => {
+    return {
+        ...stateProps,
+        ...dispatchProps,
+        selectMethod: (formValues, callParameters) => {
+            stateProps.selectedPackage !== undefined &&
+                dispatchProps.selectMethodCore(
+                    formValues,
+                    callParameters,
+                    stateProps.selectedPackage.schema !== undefined
+                        ? stateProps.selectedPackage.schema.messages
+                        : []
+                );
+        },
+    };
+};
+
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
+    mergeProps
 )(View);
