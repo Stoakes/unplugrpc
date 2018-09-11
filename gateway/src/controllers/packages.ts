@@ -12,15 +12,16 @@ import * as dbService from "../services/dbService";
  * @param res
  */
 export const list = (req: Request, res: Response) => {
-
-    const packages = dbService.get("packages").value();
-    if (packages === undefined) {
-        res.json({});
-        return;
-    }
-    res.json(packages.map((item: any) => {
-        return {name: item.name};
-    }));
+  const packages = dbService.get("packages").value();
+  if (packages === undefined) {
+    res.json({});
+    return;
+  }
+  res.json(
+    packages.map((item: any) => {
+      return { name: item.name };
+    })
+  );
 };
 
 /**
@@ -32,19 +33,20 @@ export const list = (req: Request, res: Response) => {
  * @param res
  */
 export const show = (req: Request, res: Response) => {
-
-    const pack = dbService.get("packages")
-    .find({name: req.params.name})
+  const pack = dbService
+    .get("packages")
+    .find({ name: req.params.name })
     .value();
-    if (pack === undefined) {
-        res.json({level: `error`, message: `Package not found`});
-        return;
+  if (pack === undefined) {
+    res.json({ level: `error`, message: `Package not found` });
+    return;
+  }
+  res.json({
+    ...pack,
+    filePath: pack.filePath.replace(PROTO_FOLDER, ""),
+    schema: {
+      messages: pack.schema.messages,
+      services: pack.schema.services
     }
-    res.json({
-        ...pack,
-        filePath: pack.filePath.replace(PROTO_FOLDER, ""),
-        schema: {
-            services: pack.schema.services,
-        }
-    });
+  });
 };
