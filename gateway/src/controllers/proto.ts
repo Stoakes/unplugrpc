@@ -9,6 +9,7 @@ import * as grpc from "grpc";
 import * as path from "path";
 
 import { PROTO_FOLDER } from "../config/config";
+import * as appService from "../services/appService";
 import * as dbService from "../services/dbService";
 import * as fileService from "../services/fileService";
 import * as grpcService from "../services/grpcService";
@@ -134,20 +135,9 @@ export const list = (req: Request, res: Response) => {
 };
 
 export const refresh = (req: Request, res: Response) => {
+  appService.refreshDb();
   const db = dbService.openDb();
-  const protoFiles = fileService.getProtoFromFolder(PROTO_FOLDER);
-  for (let i = 0, len = protoFiles.length; i < len; i++) {
-    db.get("routes")
-      .push({
-        filename: protoFiles[i],
-        schema: grpcService.protofileToSchema(
-          `${PROTO_FOLDER}/${protoFiles[i]}`
-        )
-      })
-      .write();
-  }
-
-  res.send(db.get("routes"));
+  res.send(db.get("packages"));
 };
 
 /**

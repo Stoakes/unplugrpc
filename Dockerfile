@@ -14,4 +14,4 @@ RUN mkdir -p /app/data/protoFolder && npm install --production
 EXPOSE 8000
 RUN adduser -S server && chown -R server /app
 USER server
-CMD node /app/dist/server.js
+CMD ["npm", "start"]
