@@ -7,14 +7,24 @@ import path from "path";
 import * as hostsController from "./controllers/hosts";
 import * as packagesController from "./controllers/packages";
 import * as protoController from "./controllers/proto";
+import { refreshDb } from "./services/appService";
 
-const newApp = (corsEnabled: boolean): express.Express => {
+const newApp = (
+  corsEnabled: boolean,
+  loadProto: boolean = false
+): express.Express => {
   const app = express();
 
   if (corsEnabled) {
     console.log(`Enabling CORS`);
     app.use(cors());
   }
+
+  if (loadProto) {
+    console.log(`Refreshing protobuf schemas`);
+    refreshDb();
+  }
+
   // Handlers
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
