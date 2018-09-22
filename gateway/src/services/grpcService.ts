@@ -4,6 +4,7 @@ import { PROTO_FOLDER } from "../config/config";
  * Functions for every grpc related interactions
  */
 
+import * as grpcLoader from "@grpc/proto-loader";
 import * as fs from "fs";
 import * as grpc from "grpc";
 import * as path from "path";
@@ -15,7 +16,8 @@ export const protofileToSchema = (
   includePath: string = undefined
 ) => {
   try {
-    grpc.load(protofilePath);
+    const packageDefinition = grpcLoader.loadSync(protofilePath);
+    grpc.loadPackageDefinition(packageDefinition);
   } catch (error) {
     console.log(`${protofilePath} can't be loaded, ignoring.`);
     return undefined;
@@ -31,7 +33,10 @@ export const load = (pathString: string): any => {
   if (!pathString.startsWith(PROTO_FOLDER)) {
     pathString = path.join(PROTO_FOLDER, pathString);
   }
-  return grpc.load(pathString);
+  const packageDefinition = grpcLoader.loadSync(pathString, {
+    includeDirs: [PROTO_FOLDER]
+  });
+  return grpc.loadPackageDefinition(packageDefinition);
 };
 
 /**
