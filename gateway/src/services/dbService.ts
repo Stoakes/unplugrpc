@@ -31,7 +31,7 @@ export const addSchema = (schema: Schema, filePath: string) => {
     .value();
 
   if (pack !== undefined) {
-    console.log(`Package ${schema.package} already exists`);
+    console.log(`Package ${schema.package} already exists, ignoring.`);
   } else {
     db.get("packages")
       .push({ name: schema.package, filePath, schema })

@@ -20,13 +20,9 @@ export const refreshDb = () => {
   db.set("packages", []).write();
   for (let i = 0, len = protoFiles.length; i < len; i++) {
     const schema = grpcService.protofileToSchema(`${protoFiles[i]}`);
-    db.get("packages")
-      .push({
-        filename: protoFiles[i],
-        name: schema.package,
-        schema
-      })
-      .write();
+    if (schema !== undefined) {
+      dbService.addSchema(schema, protoFiles[i]);
+    }
   }
 };
 
