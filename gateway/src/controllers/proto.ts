@@ -95,8 +95,7 @@ export const add = (req: Request, res: Response) => {
     // check file can be loaded, erase it otherwise
     let schema = {};
     try {
-      grpcService.load(filePath);
-      schema = grpcService.schemaParse(filePath);
+      schema = grpcService.protofileToSchema(filePath);
       dbService.addSchema(schema as Schema, filePath);
     } catch (error) {
       fs.unlink(filePath, error => {

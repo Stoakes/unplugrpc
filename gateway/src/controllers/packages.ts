@@ -43,7 +43,6 @@ export const show = (req: Request, res: Response) => {
   }
   res.json({
     ...pack,
-    filePath: pack.filePath.replace(PROTO_FOLDER, ""),
     schema: {
       messages: pack.schema.messages,
       services: pack.schema.services

@@ -11,28 +11,31 @@ import * as path from "path";
 // tslint:disable-next-line
 const schema = require("protocol-buffers-schema");
 
-export const protofileToSchema = (
-  protofilePath: string,
-  includePath: string = undefined
-) => {
-  try {
-    const packageDefinition = grpcLoader.loadSync(protofilePath);
-    grpc.loadPackageDefinition(packageDefinition);
-  } catch (error) {
-    console.log(`${protofilePath} can't be loaded, ignoring.`);
-    return undefined;
+/**
+ *
+ * @param protofilePath
+ * @param includePath
+ */
+export const protofileToSchema = (protofilePath: string) => {
+  if (!protofilePath.startsWith(PROTO_FOLDER)) {
+    protofilePath = path.join(PROTO_FOLDER, protofilePath);
   }
-  return schema.parse(fs.readFileSync(protofilePath));
+  try {
+    load(protofilePath);
+    return schema.parse(fs.readFileSync(protofilePath));
+  } catch (error) {
+    throw new Error(
+      `${protofilePath} can't be loaded: ${error.message}. Ignoring.`
+    );
+  }
 };
 
 /**
  * Simple alias to load function, to avoid importing grpc servcie in controllers.
- * @param path
+ * This should be the only method used to load a definition. Don't do loadSync in your methods
+ * @param pathString path to proto relatively to PROTO_FOLDER (proto root)
  */
 export const load = (pathString: string): any => {
-  if (!pathString.startsWith(PROTO_FOLDER)) {
-    pathString = path.join(PROTO_FOLDER, pathString);
-  }
   const packageDefinition = grpcLoader.loadSync(pathString, {
     includeDirs: [PROTO_FOLDER]
   });

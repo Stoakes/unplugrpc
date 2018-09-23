@@ -6,7 +6,7 @@
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 /* tslint:enable */
-import { DB_PATH } from "../config/config";
+import { DB_PATH, PROTO_FOLDER } from "../config/config";
 import { Method, Schema, Service, StoredSchema } from "../types/types";
 /**
  * Return  a db connection from a path file.
@@ -33,6 +33,9 @@ export const addSchema = (schema: Schema, filePath: string) => {
   if (pack !== undefined) {
     console.log(`Package ${schema.package} already exists, ignoring.`);
   } else {
+    if (filePath.startsWith(PROTO_FOLDER)) {
+      filePath = filePath.replace(PROTO_FOLDER, "");
+    }
     db.get("packages")
       .push({ name: schema.package, filePath, schema })
       .write();
