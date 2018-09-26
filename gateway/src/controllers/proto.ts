@@ -126,7 +126,7 @@ export const list = (req: Request, res: Response) => {
   const db = dbService.openDb();
   const protos = db.get("packages").map((item: any) => {
     return {
-      filePath: item.filePath.replace(PROTO_FOLDER, ""),
+      filePath: path.basename(item.filePath),
       name: item.name
     };
   });
